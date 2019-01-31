@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, jsonify
+from flask_restful import Resource, Api, reqparse
+import werkzeug, os
 
 app = Flask(__name__)
+api = Api(app)
 
 app.config['SITE_TITLE'] = 'My cool site.'
 
@@ -20,9 +23,26 @@ app.config['NAVBAR'] = [
 def index():
     return render_template('index.html')
 
-@app.route('/upload/', methods=['GET','POST'])
-def upload():
-    return render_template('upload.html')
+UPLOAD_FOLDER = 'static/img'
+parser = reqparse.RequestParser()
+parser.add_argument('file',
+    type=werkzeug.datastructures.FileStorage,
+    location='files')
+
+class FileUpload(Resource):
+    def post(self):
+        data = parser.parse_args()
+        if data['file'] == None:
+            return "no file"
+        photo = data['file']
+
+        if photo:
+            filename = 'received.png'
+            photo.save(os.path.join(UPLOAD_FOLDER, filename))
+            return "file uploaded"
+
+api.add_resource(FileUpload, '/upload')
+
 
 @app.context_processor 
 def inject_dict_for_all_templates():
