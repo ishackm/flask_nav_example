@@ -37,9 +37,9 @@ $(function() {
             processData: false,
             success: function(data) {
                 // alert(data['result']);
-                $('#UploadContainer').html('<p>Your file has been uploaded.</p>');
+                $('#UploadContainer').html(data['result']);
             }, error: function (data) {
-                $('#UploadContainer').html('<p>Upload failed.</p>');
+                $('#UploadContainer').html(data['result']);
             }
         });
     });
