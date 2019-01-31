@@ -26,6 +26,12 @@ def index():
     return render_template('index.html')
 
 UPLOAD_FOLDER = 'static/img'
+ALLOWED_EXTENSIONS = ['csv','txt']
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 parser = reqparse.RequestParser()
 parser.add_argument('file',
     type=werkzeug.datastructures.FileStorage,
@@ -35,7 +41,14 @@ class FileUpload(Resource):
     def post(self):
         data = parser.parse_args()
         if data['file'] == None:
-            return jsonify({'result':'failed'})
+            return jsonify({'result':'No file was uploaded.'})
+
+        if data['file'] == '':
+            return jsonify({'result':'Invalid file.'})
+
+        if not allowed_file(data['file'].filename):
+            return jsonify({'result':'Invalid File'})
+
         csv = data['file']
 
         if csv:
