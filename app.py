@@ -35,16 +35,17 @@ class FileUpload(Resource):
     def post(self):
         data = parser.parse_args()
         if data['file'] == None:
-            return "no file"
+            return jsonify({'result':'failed'})
         csv = data['file']
 
         if csv:
-            filename = 'received.png'
             #photo.save(os.path.join(UPLOAD_FOLDER, filename))
             process_image(csv,'output_from_flask.png')
-            return "file uploaded"
+            return jsonify({'result':'success'})
 
 api.add_resource(FileUpload, '/upload')
+
+
 
 
 @app.context_processor 
