@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, jsonify
 from flask_restful import Resource, Api, reqparse
 import werkzeug, os
 
+from mat import process_image
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -34,11 +36,12 @@ class FileUpload(Resource):
         data = parser.parse_args()
         if data['file'] == None:
             return "no file"
-        photo = data['file']
+        csv = data['file']
 
-        if photo:
+        if csv:
             filename = 'received.png'
-            photo.save(os.path.join(UPLOAD_FOLDER, filename))
+            #photo.save(os.path.join(UPLOAD_FOLDER, filename))
+            process_image(csv,'output_from_flask.png')
             return "file uploaded"
 
 api.add_resource(FileUpload, '/upload')
