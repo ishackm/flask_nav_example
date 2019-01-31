@@ -24,10 +24,11 @@
 $(function() {
 	// Function to handle form submission, replacing the contents of #UploadContainer to make it look jazzy.
     $('#upload-file-btn').click(function() {
-    	// Immediately after the click, activate the spinner
+        var form_data = new FormData($('#upload-file')[0]);
+
+        // beofre ajax call, make spinner go
         $('#UploadContainer').html('<i class="fas fa-spinner fa-spin"></i>');
 
-        var form_data = new FormData($('#upload-file')[0]);
         $.ajax({
             type: 'POST',
             url: '/upload',
