@@ -39,8 +39,8 @@ $(function() {
             success: function(data) {
                 // alert(data['result']);
                 $('#UploadContainer').html(data['result']);
-            }, error: function (data) {
-                $('#UploadContainer').html(data['result']);
+            }, error: function (xhr) {
+                $('#UploadContainer').html('ERROR: ' + xhr.status + xhr.statusText);
             }
         });
     });
